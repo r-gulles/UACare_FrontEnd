@@ -1,4 +1,4 @@
-# 🏥 UACare - Clinic Management System
+# UACare - Clinic Management System
 
 [![Frontend Status](https://img.shields.io/badge/Frontend-Vercel-blue?style=for-the-badge&logo=vercel&logoColor=white)](https://ua-care-front-end.vercel.app)
 [![Backend Status](https://img.shields.io/badge/Backend-Render-green?style=for-the-badge&logo=render&logoColor=white)](https://uacare-backend.onrender.com)
@@ -6,6 +6,13 @@
 [![Backend Framework](https://img.shields.io/badge/Backend-Django%20REST-092E20?style=for-the-badge&logo=django&logoColor=white)](https://www.django-rest-framework.org/)
 
 **UACare** is a secure clinic appointment and medical record management system designed to digitize and improve the healthcare operations of the University of the Assumption clinic. It replaces manual, paper-based workflows with a centralized digital environment accessible through web and mobile platforms, minimizing administrative bottlenecks, reducing long waiting times, and providing optimized healthcare service delivery.
+
+---
+
+## Developers
+Developed in partial fulfillment of the course requirements for **Application Development and Emerging Technologies**:
+* **Ronian Gulles**
+* **Glenn Peña**
 
 ---
 

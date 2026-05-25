@@ -6,6 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import api from "../utils/api";
 import { Typography } from "../styles/theme";
 import Avatar from "../components/Avatar";
+import { Animated, useFadeInUp, useScaleIn } from "../utils/useAnimations";
 
 export default function DoctorDashboard({ navigation }) {
   const { width } = useWindowDimensions();
@@ -87,6 +88,10 @@ export default function DoctorDashboard({ navigation }) {
     </View>
   );
 
+  const headerAnim = useFadeInUp(100);
+  const sectionAnim1 = useFadeInUp(500);
+  const sectionAnim2 = useFadeInUp(700);
+
   if (loading) return <ActivityIndicator size="large" color="#059669" style={{flex: 1}} />;
 
   return (
@@ -99,21 +104,23 @@ export default function DoctorDashboard({ navigation }) {
       >
 
         <View style={styles.mainWrapper} contentContainerStyle={{ padding: 25 }}>
-          <View style={styles.header}>
-            <Text style={styles.pageTitle} numberOfLines={1} ellipsizeMode="tail">
-              Welcome, Dr. {doctorName}
-            </Text>
+          <Animated.View style={headerAnim}>
+            <View style={styles.header}>
+              <Text style={styles.pageTitle} numberOfLines={1} ellipsizeMode="tail">
+                Welcome, Dr. {doctorName}
+              </Text>
 
-            <Text style={styles.dateSubtext}>
-              {new Date().toLocaleDateString('en-US', {
-                weekday: 'long',
-                month: 'long',
-                day: 'numeric'
-              })}
-            </Text>
+              <Text style={styles.dateSubtext}>
+                {new Date().toLocaleDateString('en-US', {
+                  weekday: 'long',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </Text>
 
-            <View style={styles.glassAccent} />
-          </View>
+              <View style={styles.glassAccent} />
+            </View>
+          </Animated.View>
           
           <View style={styles.statsGrid}>
             <StatCard label="Today" value={stats.today} color="#1E293B" icon="calendar-check" />
@@ -122,6 +129,7 @@ export default function DoctorDashboard({ navigation }) {
             <StatCard label="Remaining" value={stats.remaining} color="#6366F1" icon="progress-clock" />
           </View>
 
+          <Animated.View style={sectionAnim1}>
           <View style={styles.sectionWrapper}>  
             <Text style={styles.sectionTitle}>Needs Your Approval ({pendingRequests.length})</Text>
               {pendingRequests.length > 0 ? (
@@ -151,7 +159,9 @@ export default function DoctorDashboard({ navigation }) {
                 </View>
               )}
           </View>
+          </Animated.View>
 
+          <Animated.View style={sectionAnim2}>
           <View style={[styles.sectionWrapper, {marginBottom : 60}]}>
             <Text style={styles.sectionTitle}>Next Appointment</Text>
             
@@ -191,6 +201,7 @@ export default function DoctorDashboard({ navigation }) {
                 </View>
               )}
           </View>
+          </Animated.View>
         </View>
     </ImageBackground>
   </ScrollView>

@@ -8,6 +8,7 @@ import CompleteAppointmentModal from "../components/CompleteAppointmentModal";
 
 import api from "../utils/api";
 import { Typography } from "../styles/theme";
+import { Animated, useFadeInUp, Entrances } from "../utils/useAnimations";
 
 
 export default function DoctorSchedule() {
@@ -26,6 +27,9 @@ export default function DoctorSchedule() {
   const [isCompleteModalVisible, setIsCompleteModalVisible] = useState(false);
 
   const [sortOrder, setSortOrder] = useState('newest');
+
+  const headerAnim = useFadeInUp(100);
+  const filterAnim = useFadeInUp(250);
 
   useEffect(() => {
     loadData();
@@ -134,44 +138,48 @@ export default function DoctorSchedule() {
       >
 
       <View style={styles.mainWrapper} contentContainerStyle={{ padding: 25 }}>
-        <View style={styles.header}>
-          <View>
-            <Text style={styles.pageTitle}>Today's Schedule</Text>
+        <Animated.View style={headerAnim}>
+          <View style={styles.header}>
+            <View>
+              <Text style={styles.pageTitle}>Today's Schedule</Text>
 
-            <Text style={styles.dateSubtext}>
-              {new Date().toLocaleDateString('en-US', {
-                weekday: 'long',
-                month: 'long',
-                day: 'numeric'
-              })}
-            </Text>
-          </View>
-          <View style={styles.glassAccent} />
-        </View>
-        
-        <View style={styles.filterRow}>
-          <View style={styles.filterGroup}>
-            <View style={styles.datePickerBox}>
-              <input
-                type="date"
-                value={dateStr}
-                onChange={(e) => setDateStr(e.target.value)}
-                style={styles.dateInput}
-              />
+              <Text style={styles.dateSubtext}>
+                {new Date().toLocaleDateString('en-US', {
+                  weekday: 'long',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </Text>
             </View>
-
-            <Pressable 
-              style={styles.sortBtn} 
-              onPress={() => setSortOrder(sortOrder === 'newest' ? 'oldest' : 'newest')}
-            >
-              <MaterialCommunityIcons 
-                name={sortOrder === 'newest' ? "sort-calendar-descending" : "sort-calendar-ascending"} 
-                size={22} 
-                color="#000000" 
-              />
-            </Pressable>
+            <View style={styles.glassAccent} />
           </View>
-        </View>
+        </Animated.View>
+        
+        <Animated.View style={filterAnim}>
+          <View style={styles.filterRow}>
+            <View style={styles.filterGroup}>
+              <View style={styles.datePickerBox}>
+                <input
+                  type="date"
+                  value={dateStr}
+                  onChange={(e) => setDateStr(e.target.value)}
+                  style={styles.dateInput}
+                />
+              </View>
+
+              <Pressable 
+                style={styles.sortBtn} 
+                onPress={() => setSortOrder(sortOrder === 'newest' ? 'oldest' : 'newest')}
+              >
+                <MaterialCommunityIcons 
+                  name={sortOrder === 'newest' ? "sort-calendar-descending" : "sort-calendar-ascending"} 
+                  size={22} 
+                  color="#000000" 
+                />
+              </Pressable>
+            </View>
+          </View>
+        </Animated.View>
       
         <ScrollView horizontal={!isDesktop} showsHorizontalScrollIndicator={!isDesktop}>
           <View style={{ width: '100%' }}>
@@ -183,14 +191,16 @@ export default function DoctorSchedule() {
                 keyExtractor={(item) => item.id.toString()}
                 ListHeaderComponent={TableHeader}
                 contentContainerStyle={{ paddingBottom: 40 }}
-                renderItem={({ item }) => (
-                  <AppointmentRow
-                    item={item}
-                    onViewDetails={() => handleViewDetails(item)}
-                    onAction={handleAction}
-                    onCompletePress={handleOpenCompleteModal}
-                    onDelete={handleDelete}
-                  />
+                renderItem={({ item, index }) => (
+                  <Animated.View entering={Entrances.fadeInUp(index * 75)}>
+                    <AppointmentRow
+                      item={item}
+                      onViewDetails={() => handleViewDetails(item)}
+                      onAction={handleAction}
+                      onCompletePress={handleOpenCompleteModal}
+                      onDelete={handleDelete}
+                    />
+                  </Animated.View>
                 )}
                 ListEmptyComponent={
                   <View style={styles.emptyContainer}>

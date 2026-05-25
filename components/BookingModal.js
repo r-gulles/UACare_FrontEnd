@@ -9,6 +9,7 @@ import { View, Text, StyleSheet, Modal, Pressable, ScrollView, TextInput} from "
 import api from "../utils/api";
 import InlineAlert from "../components/InlineAlert";
 import { Typography } from "../styles/theme";
+import { Animated, useSlideTransition } from "../utils/useAnimations";
 
 
 // HELPER FUNCTIONS
@@ -61,6 +62,8 @@ export default function BookingModal({ isVisible, onClose, doctors, onBookingSuc
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState({ message: "", type: "" });
   const [bookedSlots, setBookedSlots] = useState([]);
+  
+  const slideAnim = useSlideTransition(step);
   
   const availableDates = generateDates();
   const [selectedDate, setSelectedDate] = useState(availableDates[0].fullDate);
@@ -376,11 +379,13 @@ export default function BookingModal({ isVisible, onClose, doctors, onBookingSuc
           </View>
 
           <ScrollView style={styles.scrollViewContent} contentContainerStyle={{padding: 20}}>
+            <Animated.View style={slideAnim}>
               {step === 1 && renderStep1()}
               {step === 2 && renderStep2()}
               {step === 3 && renderStep3()}
               {step === 4 && renderStep4()}
               {step === 5 && renderStep5()}
+            </Animated.View>
           </ScrollView>
 
           <View style={styles.footer}>

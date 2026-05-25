@@ -18,6 +18,7 @@ import { Toast } from "../components/Toast";
 
 import api from "../utils/api";
 import { Typography } from "../styles/theme";
+import { Animated, useFadeInScale, useFadeInUp } from "../utils/useAnimations";
 
 
 export default function RegistrationScreen({ navigation, route }) {
@@ -141,6 +142,13 @@ export default function RegistrationScreen({ navigation, route }) {
     }
   };
 
+  const logoAnim = useFadeInScale(100);
+  const cardAnim = useFadeInUp(250);
+  const sectionAnim1 = useFadeInUp(400);
+  const sectionAnim2 = useFadeInUp(550);
+  const sectionAnim3 = useFadeInUp(700);
+  const sectionAnim4 = useFadeInUp(850);
+
   return (
     <>
       <Toast 
@@ -158,14 +166,16 @@ export default function RegistrationScreen({ navigation, route }) {
       >
 
         {/* HEADER */}
-        <Image 
-          source={require('../assets/ua-clinic-logo.png')}
-          style={styles.logo} 
-          resizeMode="contain"
-        />
+        <Animated.View style={logoAnim}>
+          <Image 
+            source={require('../assets/ua-clinic-logo.png')}
+            style={styles.logo} 
+            resizeMode="contain"
+          />
+        </Animated.View>
  
         {/* CARD */}
-        <View style={styles.card}>
+        <Animated.View style={[styles.card, cardAnim]}>
 
           {/* HEADER */}
           <View style={styles.hero}>
@@ -178,7 +188,8 @@ export default function RegistrationScreen({ navigation, route }) {
           <InlineAlert message={alertConfig.message} type={alertConfig.type} />
 
           {/* PERSONAL */}
-          <Text style={[styles.sectionTitle, { marginTop: 0 }]}>Personal Information</Text>
+          <Animated.View style={sectionAnim1}>
+            <Text style={[styles.sectionTitle, { marginTop: 0 }]}>Personal Information</Text>
 
           <View style={[styles.row, isMobile && styles.rowMobile]}>
             <View style={styles.flex}>
@@ -227,9 +238,11 @@ export default function RegistrationScreen({ navigation, route }) {
               </View>
             </View>
           </View>
+          </Animated.View>
 
           {/* CONTACT */}
-          <Text style={styles.sectionTitle}>Contact Information</Text>
+          <Animated.View style={sectionAnim2}>
+            <Text style={styles.sectionTitle}>Contact Information</Text>
           <AppInput 
             label="Contact Number" 
             value={formData.contact_number}
@@ -246,9 +259,11 @@ export default function RegistrationScreen({ navigation, route }) {
             label="Address"
             value={formData.address}
             onChangeText={(v) => updateField("address", v)} />
+          </Animated.View>
 
           {/* ACADEMIC */}
-          <Text style={styles.sectionTitle}>Academic Information</Text>
+          <Animated.View style={sectionAnim3}>
+            <Text style={styles.sectionTitle}>Academic Information</Text>
           <AppInput 
             label="Course"
             value={formData.course}
@@ -268,9 +283,11 @@ export default function RegistrationScreen({ navigation, route }) {
                 onChangeText={(v) => updateField("section", v)} />
             </View>
           </View>
+          </Animated.View>
 
           {/* PASSWORD */}
-          <Text style={styles.sectionTitle}>Account Information</Text>
+          <Animated.View style={sectionAnim4}>
+            <Text style={styles.sectionTitle}>Account Information</Text>
           <AppInput 
             label="Username"
             value={formData.username}
@@ -295,8 +312,9 @@ export default function RegistrationScreen({ navigation, route }) {
               Already have an account? <Text style={styles.link}>Login</Text>
             </Text>
           </Pressable>
+          </Animated.View>
 
-        </View>
+        </Animated.View>
       </ImageBackground>
     </ScrollView>
     </>

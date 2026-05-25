@@ -20,6 +20,7 @@ import { AppInput } from "../components/AppInput";
 
 import api, { GOOGLE_WEB_CLIENT_ID } from "../utils/api";
 import { Typography } from "../styles/theme";
+import { Animated, useFadeInScale, useFadeInUp } from "../utils/useAnimations";
 
 
 if (Platform.OS !== 'web') {
@@ -197,6 +198,16 @@ export default function LoginScreen({ navigation }) {
     }
   };
 
+  const logoAnim = useFadeInScale(100);
+  const cardAnim = useFadeInUp(250);
+  const formAnim1 = useFadeInUp(400);
+  const formAnim2 = useFadeInUp(480);
+  const formAnim3 = useFadeInUp(560);
+  const formAnim4 = useFadeInUp(640);
+  const formAnim5 = useFadeInUp(720);
+  const formAnim6 = useFadeInUp(800);
+  const formAnim7 = useFadeInUp(880);
+
   return (
     <ImageBackground 
       source={require('../assets/redox-01.png')} 
@@ -205,14 +216,16 @@ export default function LoginScreen({ navigation }) {
     >
 
       {/* HEADER */}
-      <Image 
-        source={require('../assets/ua-clinic-logo.png')}
-        style={styles.logo} 
-        resizeMode="contain"
-      />
+      <Animated.View style={logoAnim}>
+        <Image 
+          source={require('../assets/ua-clinic-logo.png')}
+          style={styles.logo} 
+          resizeMode="contain"
+        />
+      </Animated.View>
 
       {/* CARD */}
-      <View style={styles.card}>
+      <Animated.View style={[styles.card, cardAnim]}>
 
         <Text style={styles.header}>Welcome Back</Text>
         <Text style={styles.subtitle}>Sign in to your UA Clinic account</Text>
@@ -220,17 +233,17 @@ export default function LoginScreen({ navigation }) {
         <InlineAlert message={alertConfig.message} type={alertConfig.type} />
         
         {/* USERNAME */}
-        <View style={styles.inputWrapper}>
+        <Animated.View style={[styles.inputWrapper, formAnim1]}>
           <AppInput
             label="Username"
             value={username}
             onChangeText={setUsername}
             setError={(val) => setAlertConfig({ ...alertConfig, message: val })}
           />
-        </View>
+        </Animated.View>
 
         {/* PASSWORD */}
-        <View style={styles.inputWrapper}>
+        <Animated.View style={[styles.inputWrapper, formAnim2]}>
           <AppInput
             label="Password"
             value={password}
@@ -238,71 +251,80 @@ export default function LoginScreen({ navigation }) {
             onChangeText={setPassword}
             setError={(val) => setAlertConfig({ ...alertConfig, message: val })}
           />
-        </View>
+        </Animated.View>
 
         {/* REMEMBER ME */}
-        <View style={styles.row}>
-          <Pressable
-            onPress={() => setRememberMe(!rememberMe)}
-            style={[styles.checkbox, rememberMe && styles.checkboxChecked]}
-          >
-            {rememberMe && <Text style={styles.checkmark}>✓</Text>}
-          </Pressable>
-          <Text style={styles.rememberText}>Remember Me</Text>
-        </View>
+        <Animated.View style={formAnim3}>
+          <View style={styles.row}>
+            <Pressable
+              onPress={() => setRememberMe(!rememberMe)}
+              style={[styles.checkbox, rememberMe && styles.checkboxChecked]}
+            >
+              {rememberMe && <Text style={styles.checkmark}>✓</Text>}
+            </Pressable>
+            <Text style={styles.rememberText}>Remember Me</Text>
+          </View>
+        </Animated.View>
 
         {/* BUTTON */}
-        <TouchableOpacity
-          style={[styles.button, loading && { opacity: 0.7 }]}
-          onPress={handleLogin}
-          disabled={loading}
-        >
-          {loading ? (
-            <ActivityIndicator color="#fff" />
-          ) : (
-            <Text style={styles.buttonText}>Sign In</Text>
-          )}
-        </TouchableOpacity>
+        <Animated.View style={formAnim4}>
+          <TouchableOpacity
+            style={[styles.button, loading && { opacity: 0.7 }]}
+            onPress={handleLogin}
+            disabled={loading}
+          >
+            {loading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={styles.buttonText}>Sign In</Text>
+            )}
+          </TouchableOpacity>
+        </Animated.View>
         
         {/* DIVIDER */}
-        <View style={styles.dividerContainer}>
-          <View style={styles.divider} />
-          <Text style={styles.dividerText}>OR</Text>
-          <View style={styles.divider} />
-        </View>
+        <Animated.View style={formAnim5}>
+          <View style={styles.dividerContainer}>
+            <View style={styles.divider} />
+            <Text style={styles.dividerText}>OR</Text>
+            <View style={styles.divider} />
+          </View>
+        </Animated.View>
         
         {/* GOOGLE SIGN IN */}
-        <TouchableOpacity 
-          style={styles.googleButton} 
-          onPress={handleGoogleLogin}
-          disabled={googleLoading}
-        >
-          {googleLoading ? (
-            <ActivityIndicator color="#444" />
-          ) : (
-            <View style={styles.googleContent}>
-              <Image 
-                source={require('../assets/google-logo.png')} 
-                style={{ width: 23, height: 23 }} 
-              />
-              <Text style={styles.googleButtonText}>Continue with UA Email</Text>
-            </View>
-          )}
-        </TouchableOpacity>
+        <Animated.View style={formAnim6}>
+          <TouchableOpacity 
+            style={styles.googleButton} 
+            onPress={handleGoogleLogin}
+            disabled={googleLoading}
+          >
+            {googleLoading ? (
+              <ActivityIndicator color="#444" />
+            ) : (
+              <View style={styles.googleContent}>
+                <Image 
+                  source={require('../assets/google-logo.png')} 
+                  style={{ width: 23, height: 23 }} 
+                />
+                <Text style={styles.googleButtonText}>Continue with UA Email</Text>
+              </View>
+            )}
+          </TouchableOpacity>
+        </Animated.View>
 
-        {/* SECURITY NOTE */}
-        <Text style={styles.securityText}>
-          Your information is securely protected
-        </Text>
-
-        {/* REGISTER */}
-        <Pressable onPress={() => navigation.navigate("Register")}>
-          <Text style={styles.registerText}>
-            Don't have an account? <Text style={styles.link}>Register here</Text>
+        {/* SECURITY NOTE & REGISTER */}
+        <Animated.View style={formAnim7}>
+          <Text style={styles.securityText}>
+            Your information is securely protected
           </Text>
-        </Pressable>
 
-      </View>
+          <Pressable onPress={() => navigation.navigate("Register")}>
+            <Text style={styles.registerText}>
+              Don't have an account? <Text style={styles.link}>Register here</Text>
+            </Text>
+          </Pressable>
+        </Animated.View>
+
+      </Animated.View>
     </ImageBackground>
   );
 }

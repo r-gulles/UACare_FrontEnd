@@ -6,6 +6,7 @@ import api from "../utils/api";
 
 import PatientHistoryCard from "../components/PatientHistoryCard";
 import MedicalHistoryModal from "../components/PatientHistoryModal";
+import { Animated, useFadeInUp, Entrances } from "../utils/useAnimations";
 
 export default function PatientHistory() {
 
@@ -13,6 +14,8 @@ export default function PatientHistory() {
   const isMobile = width < 768;
   const isDesktop = width >= 1200;
   const styles = getStyles(isMobile, isDesktop, width);
+
+  const searchAnim = useFadeInUp(100);
 
   const numColumns = isDesktop ? 2 : 1;
   
@@ -94,18 +97,20 @@ export default function PatientHistory() {
         resizeMode="repeat"
       >
         <View>
-          <View style={styles.searchContainer}>
-            <MaterialCommunityIcons name="magnify" size={24} color="#94A3B8" />
-            <TextInput 
-              placeholder="Search patient name..." 
-              style={styles.searchInput}
-              value={searchQuery}
-              onChangeText={(text) => {
-                setSearchQuery(text);
-                if (text.length >= 1 || text.length === 0) loadPatients(text);
-              }}
-            />
-          </View>
+          <Animated.View style={searchAnim}>
+            <View style={styles.searchContainer}>
+              <MaterialCommunityIcons name="magnify" size={24} color="#94A3B8" />
+              <TextInput 
+                placeholder="Search patient name..." 
+                style={styles.searchInput}
+                value={searchQuery}
+                onChangeText={(text) => {
+                  setSearchQuery(text);
+                  if (text.length >= 1 || text.length === 0) loadPatients(text);
+                }}
+              />
+            </View>
+          </Animated.View>
 
           {loading && patients.length === 0 ? (
             <ActivityIndicator size="large" color="#002366" style={{ marginTop: 40 }} />
@@ -116,13 +121,13 @@ export default function PatientHistory() {
               numColumns={numColumns}
               keyExtractor={(item) => item.id.toString()}
               columnWrapperStyle={numColumns > 1 ? styles.columnWrapper : null}
-              renderItem={({ item }) => (
-                <View style={styles.cardWrapper}>
+              renderItem={({ item, index }) => (
+                <Animated.View entering={Entrances.fadeInUp(index * 75)} style={styles.cardWrapper}>
                   <PatientHistoryCard 
                     patient={item} 
                     onPress={() => handleOpenMedicalHistory(item)} 
                   />
-                </View>
+                </Animated.View>
               )}
               contentContainerStyle={{ paddingBottom: 30 }}
             />

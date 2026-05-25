@@ -82,10 +82,16 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={initialRoute}>
+      <Stack.Navigator 
+        initialRouteName={initialRoute}
+        screenOptions={{
+          animation: 'fade_from_bottom',
+          animationDuration: 350,
+        }}
+      >
         
-        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="Register" component={RegistrationScreen} options={{ headerShown: false }}  />
+        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false, animation: 'fade' }} />
+        <Stack.Screen name="Register" component={RegistrationScreen} options={{ headerShown: false, animation: 'slide_from_right' }}  />
 
         <Stack.Screen 
           name="AdminDashboard" 

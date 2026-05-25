@@ -22,6 +22,7 @@ import { ConfirmModal } from "../components/ConfirmModal";
 
 import { Typography } from "../styles/theme";
 import api from "../utils/api";
+import { Animated, useFadeInUp } from "../utils/useAnimations";
 
 
 const GUTTER = 16;
@@ -46,6 +47,10 @@ export default function PatientDashboard() {
   const COLUMN_COUNT = isMobile ? 1 : 2;
 
   const styles = getStyles(isMobile, width);
+
+  const heroAnim = useFadeInUp(100);
+  const sectionAnim1 = useFadeInUp(300);
+  const sectionAnim2 = useFadeInUp(500);
 
 
   const [name, setName] = useState("");
@@ -208,45 +213,50 @@ export default function PatientDashboard() {
           }
           ListHeaderComponent={
             <View style={styles.headerContainer}>
-              <View style={styles.heroBanner}>
-                <View style={styles.glassAccent} />
-                  <View style={styles.heroTextContent}>
-                    <Text style={styles.heroTitle}>Welcome, {name}!</Text>
-                    <Text style={styles.heroSubtitle}>Your health is our priority. How can we help you today?</Text>
+              <Animated.View style={heroAnim}>
+                <View style={styles.heroBanner}>
+                  <View style={styles.glassAccent} />
+                    <View style={styles.heroTextContent}>
+                      <Text style={styles.heroTitle}>Welcome, {name}!</Text>
+                      <Text style={styles.heroSubtitle}>Your health is our priority. How can we help you today?</Text>
+                    </View>
+                    <Pressable 
+                      style={({ pressed }) => [
+                        styles.bookBtn,
+                        pressed && { opacity: 0.8, transform: [{ scale: 0.98 }] }
+                      ]} 
+                      onPress={() => setIsVisible(true)}
+                      >
+                      <MaterialCommunityIcons name="plus-circle" size={20} color={THEME.primaryBlue} />
+                      <Text style={styles.bookBtnText}>Book Appointment</Text>
+                    </Pressable>
                   </View>
-                  <Pressable 
-                    style={({ pressed }) => [
-                      styles.bookBtn,
-                      pressed && { opacity: 0.8, transform: [{ scale: 0.98 }] }
-                    ]} 
-                    onPress={() => setIsVisible(true)}
-                    >
-                    <MaterialCommunityIcons name="plus-circle" size={20} color={THEME.primaryBlue} />
-                    <Text style={styles.bookBtnText}>Book Appointment</Text>
-                  </Pressable>
-                </View>
+              </Animated.View>
 
-              <View style={styles.sectionHeader}>
-                <View style={styles.iconBox}>
-                  <MaterialCommunityIcons name="calendar-clock" size={28} color={THEME.primaryBlue} />
-                </View>
-                <Text style={styles.sectionTitle}>Upcoming Appointments</Text>
-                {upcoming.length > 0 && (
-                  <View style={styles.activeBadge}>
-                    <Text style={styles.activeBadgeText}>{upcoming.length} ACTIVE</Text>
+              <Animated.View style={sectionAnim1}>
+                <View style={styles.sectionHeader}>
+                  <View style={styles.iconBox}>
+                    <MaterialCommunityIcons name="calendar-clock" size={28} color={THEME.primaryBlue} />
                   </View>
-                )}
-              </View>
+                  <Text style={styles.sectionTitle}>Upcoming Appointments</Text>
+                  {upcoming.length > 0 && (
+                    <View style={styles.activeBadge}>
+                      <Text style={styles.activeBadgeText}>{upcoming.length} ACTIVE</Text>
+                    </View>
+                  )}
+                </View>
+              </Animated.View>
             </View>
           }
           ListFooterComponent={
-            <View style={styles.footerSection}>
-              <View style={styles.sectionHeader}>
-                <View style={styles.iconBoxGray}>
-                  <MaterialCommunityIcons name="history" size={28} color={THEME.primaryBlue} />
+            <Animated.View style={sectionAnim2}>
+              <View style={styles.footerSection}>
+                <View style={styles.sectionHeader}>
+                  <View style={styles.iconBoxGray}>
+                    <MaterialCommunityIcons name="history" size={28} color={THEME.primaryBlue} />
+                  </View>
+                  <Text style={styles.sectionTitle}>Appointment History</Text>
                 </View>
-                <Text style={styles.sectionTitle}>Appointment History</Text>
-              </View>
 
               <View style={styles.filterContainer}>
                 <StatusFilter 
@@ -271,7 +281,8 @@ export default function PatientDashboard() {
                   </View>
                 }
               />
-            </View>
+              </View>
+            </Animated.View>
           }
         />
       </View>

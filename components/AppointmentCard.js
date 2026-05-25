@@ -7,6 +7,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import StatusBadge from './StatusBadge';
 import { Typography } from '../styles/theme';
+import { Animated, Entrances } from '../utils/useAnimations';
 
 
 const AppointmentCard = ({ item, children, userRole, onPress }) => {
@@ -30,6 +31,7 @@ const AppointmentCard = ({ item, children, userRole, onPress }) => {
   });
 
   return (
+    <Animated.View entering={Entrances.fadeInUp(100)}>
     <Pressable
       style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
       onPress={onPress}
@@ -98,6 +100,7 @@ const AppointmentCard = ({ item, children, userRole, onPress }) => {
       {children}
     </View>
   </Pressable>
+  </Animated.View>
   );
 };
 

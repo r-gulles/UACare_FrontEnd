@@ -12,6 +12,7 @@ import { StatusFilter } from "../components/StatusFilter";
 
 import api from "../utils/api";
 import { Typography } from "../styles/theme";
+import { Animated, useFadeInUp, useScaleIn, Entrances } from "../utils/useAnimations";
 
 
 export default function AdminDashboard({ navigation }) {
@@ -19,6 +20,8 @@ export default function AdminDashboard({ navigation }) {
   const isMobile = width < 768;
 
   const styles = getStyles(isMobile);
+
+  const headerAnim = useFadeInUp(100);
 
   const [appointments, setAppointments] = useState([]);
   const [patients, setPatients] = useState([]);
@@ -432,8 +435,8 @@ export default function AdminDashboard({ navigation }) {
                   <Text style={styles.sectionTitle}>All Patients ({patients.length})</Text>
                 </>
               }
-              renderItem={({ item }) => (
-                <View style={[
+              renderItem={({ item, index }) => (
+                <Animated.View entering={Entrances.fadeInUp(index * 50)} style={[
                   styles.patientRow,
                   isMobile && { flexDirection: 'column', alignItems: 'flex-start', gap: 10 }
                 ]}>
@@ -445,7 +448,7 @@ export default function AdminDashboard({ navigation }) {
                     <MaterialCommunityIcons name="calendar-multiple" size={16} color="#94A3B8" />
                     <Text style={styles.appointmentCount}>{item.appointmentCount} appointments</Text>
                   </View>
-                </View>
+                </Animated.View>
               )}
             />
           ) : sidebarSelection === 'Personnel' ? (
@@ -504,8 +507,8 @@ export default function AdminDashboard({ navigation }) {
                   </View>
                 </>
               }
-              renderItem={({ item }) => (
-                <View style={[
+              renderItem={({ item, index }) => (
+                <Animated.View entering={Entrances.fadeInUp(index * 50)} style={[
                   styles.personnelRow,
                   isMobile && { flexDirection: 'column', alignItems: 'flex-start', gap: 10 }
                 ]}>
@@ -524,7 +527,7 @@ export default function AdminDashboard({ navigation }) {
                       <MaterialCommunityIcons name="delete" size={20} color="#EF4444" />
                     </Pressable>
                   </View>
-                </View>
+                </Animated.View>
               )}
             />
           ) : (
@@ -564,8 +567,8 @@ export default function AdminDashboard({ navigation }) {
 
       {/* Add Personnel Modal */}
       {showAddPersonnelModal && (
-        <View style={styles.modalOverlay}>
-          <View style={[
+        <Animated.View entering={Entrances.fadeIn(0)} style={styles.modalOverlay}>
+          <Animated.View entering={Entrances.springySlideUp(0)} style={[
             styles.modalContent,
             isMobile && { width: '95%', maxHeight: '95%' }
           ]}>
@@ -665,8 +668,8 @@ export default function AdminDashboard({ navigation }) {
                 <Text style={styles.confirmButtonText}>Create Account</Text>
               </Pressable>
             </View>
-          </View>
-        </View>
+          </Animated.View>
+        </Animated.View>
       )}
     </ImageBackground>
   );
